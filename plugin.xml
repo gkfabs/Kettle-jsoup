@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="JsoupPlugin"
+   iconfile="jsoup.png"
+   description="Jsoup Plugin"
+   tooltip="This is a plugin to use Jsoup library"
+   category="Transform"
+   classname="be.ibridge.kettle.jsoup.JsoupInputMeta">
+   <libraries>
+    <library name="kettle-jsoup.jar"/>
+    <library name="lib/jsoup-1.6.2.jar"/>
+    </libraries>
+    
+   <localized_category>
+     <category locale="en_US">Input</category>
+   </localized_category>
+   <localized_description>
+     <description locale="en_US">Plugin to use Jsoup</description>
+   </localized_description>
+   <localized_tooltip>
+     <tooltip locale="en_US">This is a plugin to parse HTML with Jsoup</tooltip>
+   </localized_tooltip>
+   
+</plugin>
