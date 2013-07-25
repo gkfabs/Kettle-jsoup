@@ -271,7 +271,7 @@ public class JsoupInput extends BaseStep implements StepInterface
 		for(int i =0; i<data.nrInputFields; i++) {
 			String path = meta.getInputFields()[i].getPath();
 			Elements ja =data.jsoupReader.select(path);
-			if(data.nrrecords!=-1 && data.nrrecords!= ja.size() && ja != null) {
+			if(ja.size() > 0 && (data.nrrecords!=-1 && data.nrrecords!= ja.size() && ja != null)) {
 				throw new KettleException(BaseMessages.getString(PKG, "JsoupInput.Error.BadStructure", ja.size(), path, prevPath, data.nrrecords));
 			}
 			resultList.add(ja);
