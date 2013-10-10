@@ -1,2 +1,8 @@
-build
-kettle-jsoup.jar
+/build
+/bin
+/target
+/.settings
+/.project
+/.classpath
+.DS_Store
+Thumbs.db
