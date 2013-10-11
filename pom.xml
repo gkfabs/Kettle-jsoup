@@ -7,7 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<dependency.jsoup>1.6.2</dependency.jsoup>
+		<dependency.jsoup>1.7.2</dependency.jsoup>
 	</properties>
 
 	<dependencies>
