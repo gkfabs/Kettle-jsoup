@@ -46,6 +46,8 @@ public class JsoupInputField implements Cloneable {
 
   private String name;
   private String path;
+  private boolean text;
+  private String attr;
 
   private int type;
   private int length;
@@ -60,6 +62,8 @@ public class JsoupInputField implements Cloneable {
   public JsoupInputField(String fieldname) {
     this.name = fieldname;
     this.path = "";
+    this.text = true;
+    this.attr = "";
     this.length = -1;
     this.type = ValueMetaInterface.TYPE_STRING;
     this.format = "";
@@ -81,6 +85,8 @@ public class JsoupInputField implements Cloneable {
     retval.append("      <field>").append(Const.CR);
     retval.append("        ").append(XMLHandler.addTagValue("name", getName()));
     retval.append("        ").append(XMLHandler.addTagValue("path", getPath()));
+    retval.append("        ").append(XMLHandler.addTagValue("text", isText()));
+    retval.append("        ").append(XMLHandler.addTagValue("attr", getAttr()));
     retval.append("        ").append(XMLHandler.addTagValue("type", getTypeDesc()));
     retval.append("        ").append(XMLHandler.addTagValue("format", getFormat()));
     retval.append("        ").append(XMLHandler.addTagValue("currency", getCurrencySymbol()));
@@ -99,6 +105,8 @@ public class JsoupInputField implements Cloneable {
   public JsoupInputField(Node fnode) throws KettleValueException {
     setName(XMLHandler.getTagValue(fnode, "name"));
     setPath(XMLHandler.getTagValue(fnode, "path"));
+    setText(!"N".equalsIgnoreCase(XMLHandler.getTagValue(fnode, "text")));
+    setAttr(XMLHandler.getTagValue(fnode, "attr"));
     setType(ValueMeta.getType(XMLHandler.getTagValue(fnode, "type")));
     setFormat(XMLHandler.getTagValue(fnode, "format"));
     setCurrencySymbol(XMLHandler.getTagValue(fnode, "currency"));
@@ -168,12 +176,28 @@ public class JsoupInputField implements Cloneable {
     return path;
   }
 
+  public boolean isText() {
+    return text;
+  }
+
+  public String getAttr() {
+    return attr;
+  }
+
   public void setPath(String value) {
     this.path = value;
   }
 
   public void setName(String fieldname) {
     this.name = fieldname;
+  }
+
+  public void setText(boolean text) {
+    this.text = text;
+  }
+
+  public void setAttr(String attr) {
+    this.attr = attr;
   }
 
   public int getType() {

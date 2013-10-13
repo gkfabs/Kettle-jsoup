@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.commons.vfs.FileObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.ResultFile;
@@ -442,9 +443,18 @@ public class JsoupInput extends BaseStep implements StepInterface {
       Elements jsoupa = data.resultList.get(i);
       String nodevalue = null;
       if (jsoupa != null) {
-        Object jo = (Object) jsoupa.get(data.recordnr);
+        Element jo = jsoupa.get(data.recordnr);
         if (jo != null) {
-          nodevalue = jo.toString();
+          if (field.isText()) {
+            nodevalue = jo.text();
+          } else {
+            String attr = field.getAttr();
+            if (attr != null && attr.trim().length() > 0) {
+              nodevalue = jo.attr(attr);
+            } else {
+              nodevalue = jo.toString();
+            }
+          }
         }
       }
 
