@@ -418,11 +418,38 @@ public class JsoupInput extends BaseStep implements StepInterface
 			Elements jsoupa=data.resultList.get(i);
 			String nodevalue=null;
 			if(jsoupa!=null) {
-				Object jo= (Object) jsoupa.get(data.recordnr);
+				Element jo= jsoupa.get(data.recordnr);
 				if(jo!=null){
-					nodevalue = jo.toString();
-				}
-			}
+
+                    // Do Element Type
+                    switch (field.getElementType()) {
+                    case JsoupInputField.ELEMENT_TYPE_NODE:
+                        // Do Result Type
+                        switch (field.getResultType()) {
+                        case JsoupInputField.RESULT_TYPE_TEXT:
+                            nodevalue = jo.text();
+                            break;
+                        case JsoupInputField.RESULT_TYPE_TYPE_OUTER_HTML:
+                            nodevalue = jo.outerHtml();
+                            break;
+                        case JsoupInputField.RESULT_TYPE_TYPE_INNER_HTML:
+                            nodevalue = jo.html();
+                            break;
+                        default:
+                            nodevalue = jo.toString();
+                            break;
+                        }
+                        break;
+                    case JsoupInputField.ELEMENT_TYPE_ATTRIBUT:
+                        nodevalue = jo.attr(field.getAttribute());
+                        break;
+                    default:
+                        nodevalue = jo.toString();
+                        break;
+                    }
+                }
+            }
+
 
 			// Do trimming
 			switch (field.getTrimType()) {

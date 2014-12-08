@@ -29,6 +29,28 @@ public class JsoupInputField implements Cloneable
 {
 	private static Class<?> PKG = JsoupInputMeta.class; // for i18n purposes, needed by Translator2!!   $NON-NLS-1$
 
+    public final static int ELEMENT_TYPE_NODE  = 0;
+    public final static int ELEMENT_TYPE_ATTRIBUT  = 1;
+    
+    public final static String ElementTypeCode[] = { "node", "attribute" };
+
+    public final static String ElementTypeDesc[] = {
+        BaseMessages.getString(PKG, "JsoupInputField.ElementType.Node"),
+        BaseMessages.getString(PKG, "JsoupInputField.ElementType.Attribute")
+      };
+
+    public final static int RESULT_TYPE_TEXT  = 0;
+    public final static int RESULT_TYPE_TYPE_OUTER_HTML  = 1;
+    public final static int RESULT_TYPE_TYPE_INNER_HTML  = 2;
+    
+    public final static String ResultTypeCode[] = { "valueof", "outerhtml", "innerhtml" };
+    
+    public final static String ResultTypeDesc[] = {
+        BaseMessages.getString(PKG, "JsoupInputField.ResultType.Text"),
+        BaseMessages.getString(PKG, "JsoupInputField.ResultType.OuterHtml"),
+        BaseMessages.getString(PKG, "JsoupInputField.ResultType.InnerHtml")
+      };
+    
     public final static int TYPE_TRIM_NONE  = 0;
     public final static int TYPE_TRIM_LEFT  = 1;
     public final static int TYPE_TRIM_RIGHT = 2;
@@ -46,6 +68,9 @@ public class JsoupInputField implements Cloneable
     
 	private String 	  name;
 	private String 	  path;
+	private int       elementtype;
+	private int       resulttype;
+	private String 	  attribute;
 	
     private int 	  type;
     private int       length;
@@ -60,7 +85,10 @@ public class JsoupInputField implements Cloneable
 	public JsoupInputField(String fieldname)
 	{
 		this.name           = fieldname;
-		this.path          = "";
+		this.path           = "";
+		this.elementtype    = ELEMENT_TYPE_NODE;
+		this.resulttype     = RESULT_TYPE_TEXT;
+		this.attribute      = "";
 		this.length         = -1;
 		this.type           = ValueMetaInterface.TYPE_STRING;
 		this.format         = "";
@@ -84,6 +112,9 @@ public class JsoupInputField implements Cloneable
         retval.append("      <field>").append(Const.CR);
         retval.append("        ").append(XMLHandler.addTagValue("name",         getName()));
         retval.append("        ").append(XMLHandler.addTagValue("path",        getPath()));
+        retval.append("        ").append(XMLHandler.addTagValue("element_type", getElementTypeCode()));
+        retval.append("        ").append(XMLHandler.addTagValue("result_type",  getResultTypeCode()));
+        retval.append("        ").append(XMLHandler.addTagValue("attribute",    getAttribute()));
         retval.append("        ").append(XMLHandler.addTagValue("type",         getTypeDesc()));
         retval.append("        ").append(XMLHandler.addTagValue("format",       getFormat()));
         retval.append("        ").append(XMLHandler.addTagValue("currency",     getCurrencySymbol()));
@@ -103,6 +134,9 @@ public class JsoupInputField implements Cloneable
     {
         setName( XMLHandler.getTagValue(fnode, "name") );
         setPath( XMLHandler.getTagValue(fnode, "path") );
+        setElementType( getElementTypeByCode(XMLHandler.getTagValue(fnode, "element_type")) );
+        setResultType( getResultTypeByCode(XMLHandler.getTagValue(fnode, "result_type")) );
+        setAttribute( XMLHandler.getTagValue(fnode, "attribute") );
         setType( ValueMeta.getType(XMLHandler.getTagValue(fnode, "type")) );
         setFormat( XMLHandler.getTagValue(fnode, "format") );
         setCurrencySymbol( XMLHandler.getTagValue(fnode, "currency") );
@@ -127,6 +161,28 @@ public class JsoupInputField implements Cloneable
     
     
     
+    public final static int getElementTypeByCode(String tt)
+    {
+        if (tt==null) return 0;
+        
+        /// Code to be removed later on as explained in the top of 
+        //  this file.
+        ////////////////////////////////////////////////////////////////
+        for (int i=0;i<ElementTypeCode.length;i++)
+        {
+            if (ElementTypeCode[i].equalsIgnoreCase(tt)) return i;
+        }
+        ////////////////////////////////////////////////////////////////        
+        
+        for (int i=0;i<ElementTypeCode.length;i++)
+        {
+            if (ElementTypeCode[i].equalsIgnoreCase(tt)) return i;
+        }
+
+        return 0;
+    }
+    
+    
     public final static int getTrimTypeByDesc(String tt)
     {
         if (tt==null) return 0;
@@ -139,16 +195,41 @@ public class JsoupInputField implements Cloneable
     }
     
 
+    public final static int getElementTypeByDesc(String tt)
+    {
+        if (tt==null) return 0;
+        
+        for (int i=0;i<ElementTypeDesc.length;i++)
+        {
+            if (ElementTypeDesc[i].equalsIgnoreCase(tt)) return i;
+        }
+        return 0;
+    }
+
     public final static String getTrimTypeCode(int i)
     {
         if (i<0 || i>=trimTypeCode.length) return trimTypeCode[0];
         return trimTypeCode[i]; 
     }
     
+    public final static String getElementTypeCode(int i)
+    {
+    	// To be changed to the new code once all are converted
+        if (i<0 || i>=ElementTypeCode.length) return ElementTypeCode[0];
+        return ElementTypeCode[i]; 
+    }
+    
+    
     public final static String getTrimTypeDesc(int i)
     {
         if (i<0 || i>=trimTypeDesc.length) return trimTypeDesc[0];
         return trimTypeDesc[i]; 
+    }
+    
+    public final static String getElementTypeDesc(int i)
+    {
+        if (i<0 || i>=ElementTypeDesc.length) return ElementTypeDesc[0];
+        return ElementTypeDesc[i]; 
     }
     
     public Object clone()
@@ -225,15 +306,28 @@ public class JsoupInputField implements Cloneable
 		return trimtype;
 	}
 
+    public int getElementType()
+	{
+		return elementtype;
+	}
 	
     public String getTrimTypeCode()
 	{
 		return getTrimTypeCode(trimtype);
 	}
 
+    public String getElementTypeCode()
+	{
+		return getElementTypeCode(elementtype);
+	}
+
 	public String getTrimTypeDesc()
 	{
 		return getTrimTypeDesc(trimtype);
+	}
+	public String getElementTypeDesc()
+	{
+		return getElementTypeDesc(elementtype);
 	}
 	
 	public void setTrimType(int trimtype)
@@ -241,6 +335,11 @@ public class JsoupInputField implements Cloneable
 		this.trimtype= trimtype;
 	}
 	
+	public void setElementType(int element_type)
+	{
+		this.elementtype= element_type;
+	}
+
 	public String getGroupSymbol()
 	{
 		return groupSymbol;
@@ -290,9 +389,67 @@ public class JsoupInputField implements Cloneable
 	{
 		this.repeat = repeat;
 	}
-	
+
+	public String getAttribute()
+	{
+		return attribute;
+	}
+
+	public void setAttribute(String attribute)
+	{
+		this.attribute = attribute;
+	}
+
 	public void flipRepeated()
 	{
 		repeat = !repeat;		
 	}
- }
+
+   public final static int getResultTypeByDesc(String tt)
+    {
+        if (tt==null) return 0;
+        
+        for (int i=0;i<ResultTypeDesc.length;i++)
+        {
+            if (ResultTypeDesc[i].equalsIgnoreCase(tt)) return i;
+        }
+        return 0;
+    }
+	public String getResultTypeDesc()
+	{
+		return getResultTypeDesc(resulttype);
+	}
+   public final static String getResultTypeDesc(int i)
+   {
+       if (i<0 || i>=ResultTypeDesc.length) return ResultTypeDesc[0];
+       return ResultTypeDesc[i]; 
+   }
+	public int getResultType()
+	{
+		return resulttype;
+	}
+   public void setResultType(int resulttype)
+	{
+		this.resulttype= resulttype;
+	}
+   public final static int getResultTypeByCode(String tt)
+   {
+       if (tt==null) return 0;    
+       
+       for (int i=0;i<ResultTypeCode.length;i++)
+       {
+           if (ResultTypeCode[i].equalsIgnoreCase(tt)) return i;
+       }
+
+       return 0;
+   }
+   public final static String getResultTypeCode(int i)
+   {
+       if (i<0 || i>=ResultTypeCode.length) return ResultTypeCode[0];
+       return ResultTypeCode[i]; 
+   }
+   public String getResultTypeCode()
+	{
+		return getResultTypeCode(resulttype);
+	}
+}

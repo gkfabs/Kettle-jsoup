@@ -833,6 +833,20 @@ public class JsoupInputDialog extends BaseStepDialog implements StepDialogInterf
                  ColumnInfo.COLUMN_TYPE_TEXT,
                  false),
 			 new ColumnInfo(
+         BaseMessages.getString(PKG, "JsoupInputDialog.FieldsTable.Element.Column"),
+         ColumnInfo.COLUMN_TYPE_CCOMBO,
+         JsoupInputField.ElementTypeDesc,
+         true ),
+			 new ColumnInfo(
+         BaseMessages.getString(PKG, "JsoupInputDialog.FieldsTable.ResultType.Column"),
+         ColumnInfo.COLUMN_TYPE_CCOMBO,
+         JsoupInputField.ResultTypeDesc,
+         true ),
+			 new ColumnInfo(
+         BaseMessages.getString(PKG, "JsoupInputDialog.FieldsTable.Attribute.Column"),
+         ColumnInfo.COLUMN_TYPE_TEXT,
+         false ),
+			 new ColumnInfo(
          BaseMessages.getString(PKG, "JsoupInputDialog.FieldsTable.Type.Column"),
          ColumnInfo.COLUMN_TYPE_CCOMBO,
          ValueMeta.getTypes(),
@@ -1237,6 +1251,9 @@ public class JsoupInputDialog extends BaseStepDialog implements StepDialogInterf
     			TableItem item = wFields.table.getItem(i);
     			String name     = field.getName();
     			String xpath	= field.getPath();
+    			String element  = field.getElementTypeDesc();
+    			String resulttype = field.getResultTypeDesc();
+    			String attribute = field.getAttribute();
     			String type     = field.getTypeDesc();
     			String format   = field.getFormat();
     			String length   = ""+field.getLength();
@@ -1249,15 +1266,18 @@ public class JsoupInputDialog extends BaseStepDialog implements StepDialogInterf
     			
                 if (name    !=null) item.setText( 1, name);
                 if (xpath   !=null) item.setText( 2, xpath);
-    			if (type    !=null) item.setText( 3, type    );
-    			if (format  !=null) item.setText( 4, format  );
-    			if (length  !=null && !"-1".equals(length  )) item.setText( 5, length  );
-    			if (prec    !=null && !"-1".equals(prec    )) item.setText( 6, prec    );
-    			if (curr    !=null) item.setText( 7, curr    );
-    			if (decim   !=null) item.setText( 8, decim   );
-    			if (group   !=null) item.setText( 9, group   );
-    			if (trim    !=null) item.setText( 10, trim    );
-    			if (rep     !=null) item.setText(11, rep     );
+                if (element != null) item.setText( 3, element);
+                if (resulttype != null) item.setText( 4, resulttype);
+                if (attribute != null) item.setText( 5, attribute);
+                if (type    !=null) item.setText( 6, type    );
+                if (format  !=null) item.setText( 7, format  );
+                if (length  !=null && !"-1".equals(length  )) item.setText( 8, length  );
+                if (prec    !=null && !"-1".equals(prec    )) item.setText( 9, prec    );
+                if (curr    !=null) item.setText( 10, curr    );
+                if (decim   !=null) item.setText( 11, decim   );
+                if (group   !=null) item.setText( 12, group   );
+                if (trim    !=null) item.setText( 13, trim    );
+                if (rep     !=null) item.setText(14, rep     );
                 
             }
 		}     
@@ -1334,15 +1354,18 @@ public class JsoupInputDialog extends BaseStepDialog implements StepDialogInterf
             
 			field.setName( item.getText(1) );
 			field.setPath( item.getText(2) );
-			field.setType( ValueMeta.getType(item.getText(3)) );
-			field.setFormat( item.getText(4) );
-			field.setLength( Const.toInt(item.getText(5), -1) );
-			field.setPrecision( Const.toInt(item.getText(6), -1) );
-			field.setCurrencySymbol( item.getText(7) );
-			field.setDecimalSymbol( item.getText(8) );
-			field.setGroupSymbol( item.getText(9) );
-			field.setTrimType( JsoupInputField.getTrimTypeByDesc(item.getText(10)) );
-			field.setRepeated( BaseMessages.getString(PKG, "System.Combo.Yes").equalsIgnoreCase(item.getText(11)) );		
+			field.setElementType( JsoupInputField.getElementTypeByDesc(item.getText(3)) );
+			field.setResultType( JsoupInputField.getResultTypeByDesc(item.getText(4)) );
+			field.setAttribute( item.getText(5) );
+			field.setType( ValueMeta.getType(item.getText(6)) );
+			field.setFormat( item.getText(7) );
+			field.setLength( Const.toInt(item.getText(8), -1) );
+			field.setPrecision( Const.toInt(item.getText(9), -1) );
+			field.setCurrencySymbol( item.getText(10) );
+			field.setDecimalSymbol( item.getText(11) );
+			field.setGroupSymbol( item.getText(12) );
+			field.setTrimType( JsoupInputField.getTrimTypeByDesc(item.getText(13)) );
+			field.setRepeated( BaseMessages.getString(PKG, "System.Combo.Yes").equalsIgnoreCase(item.getText(14)) );		
             
 			in.getInputFields()[i] = field;
 		}		
