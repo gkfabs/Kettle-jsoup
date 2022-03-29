@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs2.FileObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.pentaho.di.core.fileinput.FileInputList;
